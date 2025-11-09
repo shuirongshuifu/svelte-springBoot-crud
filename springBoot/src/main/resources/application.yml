@@ -1,0 +1,57 @@
+# 核心配置文件——相当于前端项目中.env文件 + vite.config.js文件
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: myapp
+  datasource:
+    # 意思是请通过 JDBC 【jdbc是Java Database Connectivity（Java 数据库连接）的缩写】 方式
+    # 连接到 IP 为本机、端口为3306的 MySQL 服务器上的person_manage数据库，并用下面的username和password进行身份验证
+    url: jdbc:mysql://localhost:3306/person_manage
+    username: root
+    password: password1234
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      # Spring Boot自带默认的连接池——HikariCP
+      pool-name: HikariPool
+      # 最小空闲连接数
+      minimum-idle: 5
+      # 最大连接数（根据应用负载调整）
+      maximum-pool-size: 20
+      # 连接最大存活时间（分钟）
+      max-lifetime: 1800000
+      # 连接超时时间（毫秒）
+      connection-timeout: 30000
+      # 空闲连接超时时间（毫秒）
+      idle-timeout: 600000
+      # 连接测试查询
+      connection-test-query: SELECT 1
+      # 连接泄漏检测阈值（毫秒）
+      leak-detection-threshold: 60000
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+
+mybatis-plus:
+  # 1. Mapper扫描配置（必选）
+  mapper-locations: classpath:mapper/**/*.xml  # XML映射文件路径（支持通配符）
+  type-aliases-package: com.people_sys.people.entity # 实体类包名（简化XML中的resultType）
+  # 2. 全局配置（可选）
+  global-config:
+    db-config:
+      id-type: auto  # 主键策略：自增（可选值：auto/input/uuid等，参考资料9）
+      logic-delete-field: del_flag  # 逻辑删除字段名（如需要逻辑删除）
+      table-prefix: t_  # 表名前缀（如实体类User对应表t_user）
+
+  # 3. 配置项（可选）
+  configuration:
+    map-underscore-to-camel-case: true  # 开启驼峰命名自动映射（默认true）
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 控制台打印SQL日志（调试用）
+    call-setters-on-nulls: true  # 查询结果为null时返回字段（避免JSON序列化丢失key）
+
+swagger:
+  enable: true # 开启Swagger
+  base-package: com.people_sys.people.controller # 扫描的控制器包路径

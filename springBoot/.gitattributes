@@ -1,0 +1,6 @@
+# 这个文件就是 Git 的 “换行符管家”，
+# 专门解决跨系统协作时脚本文件的换行符问题，
+# 确保mvnw和mvnw.cmd在各自系统上都能正常工作
+
+/mvnw text eol=lf
+*.cmd text eol=crlf
